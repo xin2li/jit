@@ -1,0 +1,65 @@
+.el-menu--horizontal {
+  --el-menu-horizontal-height: 125px;
+}
+
+.custom-menu-item-0 {
+    width: 200px; /* 可根据需要调整宽度 */
+    box-sizing: border-box; /* 避免内边距和边框影响宽度 */
+}
+.custom-menu-item-1 {
+    width: 600px; /* 可根据需要调整宽度 */
+    font-size: 25px !important;
+    box-sizing: border-box; /* 避免内边距和边框影响宽度 */
+
+}
+.custom-menu-item-alive {
+    width: 225px; /* 可根据需要调整宽度 */
+    color:orange !important;
+
+    box-sizing: border-box; /* 避免内边距和边框影响宽度 */
+}
+.custom-menu-item-link {
+    width: 225px; /* 可根据需要调整宽度 */
+    box-sizing: border-box; /* 避免内边距和边框影响宽度 */
+}
+
+.el-menu-demo {
+    width: 100%;
+    box-sizing: border-box;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* 让第一个菜单项靠最左 */
+.el-menu-demo .el-menu-item:nth-child(1) {
+    margin-right: auto;
+}
+
+/* 让第二个菜单项居中 */
+.el-menu-demo .el-menu-item:nth-child(2) {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+}
+
+/* 让第三和第四个菜单项靠右 */
+.el-menu-demo .el-menu-item:nth-child(3),
+.el-menu-demo .el-menu-item:nth-child(4) {
+
+    margin-left: 0;
+}
+
+
+.el-link{
+    font-size: 30px !important;
+}
+
+
+/* 防止列被压缩 */
+
+.el-table__header-wrapper .el-table__header,
+.el-table__body-wrapper .el-table__body {
+  width: 100% !important;
+}

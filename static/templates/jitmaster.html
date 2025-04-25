@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport"
+			  content="width=device-width, initial-scale=1.0">
+		<title>DMV JIT error</title>
+
+		<link rel="stylesheet"
+			  href="/static/css/main.css" />
+		<script src="https://cdn.jsdelivr.net/npm/vue@3.4.21/dist/vue.global.js"></script>
+
+
+		<script src="https://cdn.jsdelivr.net/npm/element-plus@2.6.3/dist/index.full.js"></script>
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/element-plus@2.6.3/dist/index.css" />
+
+		<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+	</head>
+
+	<body>
+		
+
+		<div id="app">
+
+			<el-menu :default-active="activeIndex"
+					 background-color="#545c64"
+					 text-color="#fff"
+					 class="el-menu-demo"
+					 mode="horizontal"
+					 :ellipsis="false"
+					 active-text-color="#fff">
+
+				<el-menu-item index="0"
+							  class="custom-menu-item-0"
+							  @click="homeClick"
+							  style="font-size: 50px;width: 275px;">
+					JIT Error
+				</el-menu-item>
+
+				<el-menu-item index="1"
+							  class="custom-menu-item-1">update time ：{{errorupdateTime}}
+							  <el-popover placement="bottom" :width="" trigger="click">
+								<template #reference>
+								  <el-button>FX</el-button>
+								</template>
+								<el-table :data="gridData">
+								  <el-table-column width="150" prop="FX0810O" label="FX0810O" />
+								  <el-table-column width="100" prop="FX0810U" label="FX0810U" />
+								  <el-table-column width="300" prop="FX0812" label="FX0812" />
+								</el-table>
+							  </el-popover>
+							     </el-menu-item>
+
+				<el-menu-item index="2"
+							  class="custom-menu-item-link">
+					<el-link href="/errorhistory"
+							 target="_blank"
+							 type="info"
+							 class="el-link">Error History</el-link>
+				</el-menu-item>
+
+				<el-menu-item index="3"
+							  class="custom-menu-item-alive">
+					<el-link href="/jitmaster"
+							 
+							 type="info"
+							 class="el-link">JIT Master</el-link>
+				</el-menu-item>
+
+			</el-menu>
+
+			<div style="height: 50px;"></div>
+
+			<div>jit master</div>
+			
+
+		</div>
+		
+		<script src="/static/js/main.js"></script>
+	</body>
+</html>

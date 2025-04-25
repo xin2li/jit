@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport"
+			  content="width=device-width, initial-scale=1.0">
+		<title>DMV JIT error</title>
+
+		<link rel="stylesheet"
+			  href="/static/css/main.css" />
+		<script src="https://cdn.jsdelivr.net/npm/vue@3.4.21/dist/vue.global.js"></script>
+
+
+		<script src="https://cdn.jsdelivr.net/npm/element-plus@2.6.3/dist/index.full.js"></script>
+		<link rel="stylesheet"
+			  href="https://cdn.jsdelivr.net/npm/element-plus@2.6.3/dist/index.css" />
+
+		<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+	</head>
+
+	<body>
+
+
+		<div id="app">
+
+			<el-menu :default-active="activeIndex"
+					 background-color="#545c64"
+					 text-color="#fff"
+					 class="el-menu-demo"
+					 mode="horizontal"
+					 :ellipsis="false"
+					 active-text-color="#fff">
+
+				<el-menu-item index="0"
+							  class="custom-menu-item-0"
+							  @click="homeClick"
+							  style="font-size: 50px;width: 275px;">
+					JIT Error
+				</el-menu-item>
+
+				<el-menu-item index="1"
+							  class="custom-menu-item-1">update time ：{{error_updatetime}}
+					<el-popover placement="bottom"
+								:width=""
+								trigger="click">
+						<template #reference>
+							<el-button>FX:{{fx_updatetime}}</el-button>
+						</template>
+						<el-table :data="gridData">
+							<el-table-column width="150"
+											 prop="FX0810O"
+											 label="FX0810O" />
+							<el-table-column width="100"
+											 prop="FX0810U"
+											 label="FX0810U" />
+							<el-table-column width="300"
+											 prop="FX0812"
+											 label="FX0812" />
+						</el-table>
+					</el-popover>
+				</el-menu-item>
+
+				<el-menu-item index="2"
+							  class="custom-menu-item-link">
+					<el-link href="/errorhistory"
+							 target="_blank"
+							 type="info"
+							 class="el-link">Error History</el-link>
+				</el-menu-item>
+
+				<el-menu-item index="3"
+							  class="custom-menu-item-link">
+					<el-link href="/jitmaster"
+							 target="_blank"
+							 type="info"
+							 class="el-link">JIT Master</el-link>
+				</el-menu-item>
+
+			</el-menu>
+
+			<div style="height: 50px;"></div>
+
+
+			<el-table :data="current_errorData"
+					  style="width: 75%; margin-inline: auto;"
+					  :header-cell-style="{background: '#f5f7fa', color: '#606266'}"
+					  @expand-change="handleExpand"
+					  resizable
+					  @row-dblclick="handleRowDblClick">
+
+
+
+				<el-table-column prop="error_statusN"
+								 label="Status"
+								 width="" />
+				</el-table-column>
+				<el-table-column prop="error_plant"
+								 label="Plant"
+								 width="" />
+				</el-table-column>
+				<el-table-column prop="error_tma"
+								 label="TMA"
+								 width="" />
+				</el-table-column>
+				<el-table-column prop="error_ta"
+								 label="TA"
+								 width="" />
+				</el-table-column>
+				<el-table-column prop="error_fehler"
+								 label="Fehler"
+								 width="" />
+				</el-table-column>
+				<el-table-column prop="error_anzahl"
+								 label="Anzahl"
+								 width="" />
+				</el-table-column>
+				<el-table-column prop="error_lastanzahl"
+								 label="Last Anzahl"
+								 width="" />
+				</el-table-column>
+				<el-table-column prop="error_referenzen"
+								 label="Referenzen"
+								 width="" />
+				</el-table-column>
+
+				<el-table-column prop="error_pn"
+								 label="PN">
+					<!--				<template #default="scope">-->
+					<!--					<el-select v-model="scope.row.error_pn"-->
+					<!--							   filterable-->
+					<!--							   allow-create-->
+					<!--							   placeholder="请选择或输入"-->
+					<!--							   style="width: 240px">-->
+					<!--						<el-option v-for="item in scope.row.FX0812"-->
+					<!--								   :key="item.PN"-->
+					<!--								   :label="item.PN"-->
+					<!--								   :value="item.PN" />-->
+					<!--					</el-select>-->
+					<!--				</template>-->
+				</el-table-column>
+				<el-table-column prop="error_bemerkung"
+								 label="Bemerkung"
+								 width="" />
+				<template #default="scope">
+					<el-input v-model="scope.row.error_bemerkung"
+							  type="textarea" />
+				</template>
+				</el-table-column>
+				<el-table-column prop="error_type"
+								 label="Type"
+								 width="" />
+				<!--			<template #default="scope">-->
+				<!--				<el-select v-model="scope.row.error_type"-->
+				<!--						   placeholder="请选择"-->
+				<!--						   style="width: 240px">-->
+				<!--					<el-option v-for="item in optionsType"-->
+				<!--							   :key="item.type"-->
+				<!--							   :label="item.type"-->
+				<!--							   :value="item.type" />-->
+				<!--				</el-select>-->
+				<!--			</template>-->
+				</el-table-column>
+				<el-table-column prop="error_inlist"
+								 label="inlist"
+								 width="" />
+				</el-table-column>
+
+				<el-table-column type="expand">
+
+					<template #default="props">
+						<!--					<div v-if="expandedRow === props.row">-->
+						<!-- <el-form v-if="props && props.row.FX0810O[0]" -->
+
+						<!-- label-width="120px"
+								 style="margin: 20px;"> -->
+
+
+						<el-row>
+
+							<el-col :span="12">
+								<el-descriptions column=2>
+									<el-descriptions-item label="Group :">{{props.row.FX0810O[0].FISTAG}}</el-descriptions-item>
+									<el-descriptions-item label="Remark :">{{props.row.FX0810O[0].REMARK}}</el-descriptions-item>
+								</el-descriptions>
+
+								<el-descriptions column=4>
+									<el-descriptions-item label="Test Mode :">
+										<el-tag size="large">{{props.row.FX0810O[0].TESTMODE}}</el-tag>
+									</el-descriptions-item>
+									<el-descriptions-item label="Part Kind :">
+										<el-tag size="large">{{props.row.FX0810O[0].PARTKIND}}</el-tag>
+									</el-descriptions-item>
+									<el-descriptions-item label="Min :">
+										<el-tag size="large">{{props.row.FX0810O[0].MIN}}</el-tag>
+									</el-descriptions-item>
+									<el-descriptions-item label="Max :">
+										<el-tag size="large">{{props.row.FX0810O[0].MAX}}</el-tag>
+									</el-descriptions-item>
+								</el-descriptions>
+
+							</el-col>
+
+							<el-col :span="12">
+								<el-descriptions column="1">
+									<el-descriptions-item>
+										<el-table :data="props.row.FX0810U">
+											<el-table-column prop="MY"
+															 label="Model Year"></el-table-column>
+											<el-table-column prop="VAILD"
+															 label="Valid From"></el-table-column>
+											<el-table-column prop="INVAILD"
+															 label="Invalid From"></el-table-column>
+											<el-table-column prop="PR"
+															 label="Order Limit"></el-table-column>
+
+										</el-table>
+									</el-descriptions-item>
+								</el-descriptions>
+
+							</el-col>
+
+						</el-row>
+
+
+
+						<!-- <el-form-item label="PN">
+								<div>
+									<el-select v-model="formPN"
+											   filterable
+											   allow-create
+
+
+											   placeholder="请选择或输入"
+											   style="width: 240px">
+										<el-option v-for="item in props.row.FX0812"
+										:key="item.PN"
+										:label="item.PN"
+										:value="item.PN" />
+									</el-select>
+								</div>
+							</el-form-item>
+
+							<el-form-item label="Type">
+								<div>
+									<el-select v-model="props.row.Type"
+
+
+
+											   placeholder="请选择"
+											   style="width: 240px">
+										<el-option v-for="item in optionsType"
+												   :key="item.type"
+												   :label="item.type"
+												   :value="item.type" />
+									</el-select>
+								</div>
+							</el-form-item>
+
+							<el-form-item label="Bemerkung">
+								<el-input v-model="props.row.Bemerkung"
+										  type="textarea" />
+							</el-form-item>
+
+							<el-form-item>
+								<el-button type="primary"
+										   @click="saveRowData(props.row)">Save</el-button>
+								<el-button @click="toggleExpand(props.row)">Cancel</el-button>
+							</el-form-item> -->
+
+						<!-- </el-form> -->
+
+						<!-- <div v-else >NO JIT master //update error//</div> -->
+						<!--					</div>-->
+					</template>
+
+				</el-table-column>
+
+			</el-table>
+
+		</div>
+
+		<script src="/static/js/main.js"></script>
+	</body>
+</html>
